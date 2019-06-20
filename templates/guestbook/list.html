@@ -1,5 +1,6 @@
 {% extends '../base.html' %}
 
+
 {% block csslink %}
 	<link href="/assets/css/guestbook.css" rel="stylesheet" type="text/css">
 {% endblock %}
@@ -26,7 +27,7 @@
 			<li>
 				<table>
 					<tr>
-						<td>{{gdata.id}}</td>
+						<td>{{forloop.revcounter}}</td>
 						<td>{{gdata.name}}</td>
 						<td>{{gdata.regdate}}</td>
 						<td><a href="/guestbook/deleteform/{{gdata.id}}">삭제</a></td>

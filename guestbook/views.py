@@ -9,8 +9,10 @@ from guestbook.models import Guestbook
 def guestbooklist(request):
 
     guestbook = Guestbook.objects.all().order_by('-id')
+    cnt = len(guestbook)
     data = {
-        'guestbook': guestbook
+        'guestbook': guestbook,
+        'cnt': cnt
     }
 
     return render(request, 'guestbook/list.html', data)
