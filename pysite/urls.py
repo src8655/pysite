@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 import main.views as main_views
 import user.views as user_views
+import guestbook.views as guestbook_views
 
 urlpatterns = [
     # main
@@ -27,7 +28,11 @@ urlpatterns = [
     path('user/join', user_views.join),
     path('user/joinsuccess', user_views.joinsuccess),
 
-
+    # guestbook
+    path('guestbook/', guestbook_views.guestbooklist),
+    path('guestbook/add', guestbook_views.add),
+    path('guestbook/deleteform/<int:id>', guestbook_views.deleteform),
+    path('guestbook/delete', guestbook_views.delete),
 
 
 
