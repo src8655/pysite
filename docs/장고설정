@@ -1,0 +1,172 @@
+- 기본적으로 장고 프로젝트 한 개당 한 개의 DB를 사용한다.
+- 장고 프로젝트에는 기본적으로 관리프로그램이 내장되기 때문에
+
+- postgresql 에 db 생성 및 계정생성 접근 권한 설정
+psql -U postgres
+1. create database pysite;
+2. create user pysite with password 'pysite';
+3. grant all privileges on all tables in schema public to pysite;
+4. data/pg_hba.conf 접근 설정
+/etc/init.d/postgres stop
+/etc/init.d/postgres start
+
+
+
+- pycharm(community) 에서 Django 프로젝트 시작하기
+
+1. pycharm 프로젝트 생성(pysite 프로젝트)
+
+2. Django 설치
+    [터미널]
+   pip install django
+
+3. Django 프로젝트 생성
+    [터미널]
+    django-admin startproject pysite
+
+4. 디렉토리 정리
+    -> pycharm 프로젝트와 django 프로젝트의 디렉토리 일치시키는 작업
+        /pysite(프로젝트)
+            |--- /pysite
+            |        |---  __init__.py
+            |        |---  settings.py
+            |        |---  urls.py
+            |        |---  wsgi.py
+            |---  manage.py
+            |---  /templates
+
+5. psycopg2(postgres db lib) 설치
+    [터미널]
+    pip install psycopg2
+
+6. settings.py 설정
+    1) TIME_ZONE = 'Asia/Seoul'
+    2)  DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': 'djdb',
+                'USER': 'djdb',
+                'PASSWORD': 'djdb',
+                'HOST': '192.168.0.10',
+                'PORT': 5432
+            }
+        }
+    3) Template 디렉토리 설정
+        TEMPLATES = [
+        {
+            ...
+            ...
+            'DIRS': [os.path.join(BASE_DIR, 'templates')],
+            ...
+            ...
+
+7. Django 프로젝트의 기본 관리 어플리케이션이 사용하는 테이블
+    [터미널]
+    Django가 기본적으로 사용하는 db를 postgresql에 적용
+    python manage.py migrate
+
+8. Django 프로젝트의 기본 관리 어플리케이션로그인 계정 생성
+    [터미널]
+    python manage.py createsuperuser
+    src8655 src8655@naver.com snrnsnrn11
+
+9. 지금까지 작업 내용 확인하기
+    [터미널]
+    python manage.py runserver 0.0.0.0:8888
+
+
+- Application 작업
+1) main
+    1. 어플리케이션 추가
+        [터미널]
+        python manage.py startapp main
+
+    2. 어플리케이션 등록 (settings.py)
+        INSTALLED_APPS = [
+            'main',
+            ...
+            ...
+
+    3. /templates
+           |--- /main
+        templates에 main 디렉터리 추가
+
+    4. Model 정의(생략)
+
+    5. urls.py 에 path 추가(url-view의 handler 매핑)
+        import main.views as main_views
+        urlpatterns = [
+            path('', main_views.index),
+            ...
+            ...
+
+    6. views에 함수 추가 (요청처리, 모델작업, 응답)
+        def index(request):
+            return render(request, 'main/index.html')
+
+    7. /templates 에 html 추가
+
+    8. settings.py 맨 밑에 static 설정
+        STATICFILES_DIRS = (os.path.join(BASE_DIR, 'statics'))
+        STATIC_URL = '/assets/'
+
+    9. 템플릿구조 만들기
+            /templates/base.html 생성: 변하지 않는 부분
+            {% block 블럭이름 %}{% endblock %} : 변하는 부분에 추가
+
+            index.html 에는
+            {% block 블럭이름 %}{% endblock %} 사이에 추가
+
+
+2) user
+    1. 어플리케이션 추가
+        [터미널]
+        python manage.py startapp user
+
+    2. 어플리케이션 등록 (settings.py)
+        INSTALLED_APPS = [
+            'user',
+            ...
+            ...
+
+    3. /templates
+           |--- /user
+        templates에 user 디렉터리 추가
+
+    4. Model 정의
+        4-1. /user/models.py 열기
+                models.Model를 상속받는 User 클래스를 만들어서 클래스 변수를 선언
+                    => 알아서 DB에 Table을 생성해주기 위해서 : ORM 이라고 함
+                주 키는 id로 models에서 자동으로 만들어줌
+        4-2. admin.py에
+                admin.site.register(User)
+        4-3. migrations 이름의 DDL python 모듈을 생성
+                [터미널]
+                python manage.py makemigrations
+                    => /user/migrations/0001_initial.py 에 추가된다.
+        4-4. 물리DB와 스키마 동기화 작업을 한다.
+                [터미널]
+                python manage.py migrate
+                    => DB에 DDL작업을 함
+                    => user_user 테이블로 추가됨
+                        (앱이름_모듈이름)
+
+    5. urls.py 에 path 추가(url-view의 handler 매핑)
+        import helloworld.views as helloworld_views
+        urlpatterns = [
+            path('emaillist/', emaillist_views.index),
+            ...
+            ...
+
+    6. views에 함수 추가 (요청처리, 모델작업, 응답)
+        def index(request):
+            return render(request, 'emaillist/index.html')
+        def form(request):
+            return render(request, 'emaillist/form.html')
+
+    7. /templates
+            |--- /emaillist
+                      |--- form.html    => {% csrf_token %}
+                      |--- index.html
+        /templates/emaillist에 html 추가
+

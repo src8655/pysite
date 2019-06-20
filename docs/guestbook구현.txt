@@ -1,0 +1,21 @@
+1. model
+2. /guestbook/deleteform/10
+    def hello2(request, id=0):
+        path('helloworld/hello2/<int:id>', helloworld_views.hello2),
+        return HttpResponse('id:{0}'.format(id))
+
+3. orm method
+    index(list)     => ok
+    add             => ok
+    delete
+        1. repository 에서 객체를 영속화
+           guestbook = Guestbook.objects.filter(id=20).filter(password='1234')
+           guestbook.delete()
+
+
+
+
+[구현안해도 되는 것]
+list.html 템플릿에서
+1. 메세지 index 접는 것 하지말 것(filter 사용 (하고싶으면) : Django template arithmetic operation 검색)
+2. 메시지 개행문자 <br /> replace 하지말 것(Django template replace 검색)
