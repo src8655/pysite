@@ -1,5 +1,6 @@
 {% extends '../base.html' %}
 
+{% load mathfilters %}
 
 {% block csslink %}
 	<link href="/assets/css/guestbook.css" rel="stylesheet" type="text/css">
@@ -9,7 +10,7 @@
 	<div id="guestbook">
 		<form action="/guestbook/add" method="post">
 			{% csrf_token %}
-			<table>
+			<table style="border-collapse:collapse;">
 				<tr>
 					<td>이름</td><td><input type="text" name="name"></td>
 					<td>비밀번호</td><td><input type="password" name="password"></td>
@@ -23,14 +24,25 @@
 			</table>
 		</form>
 		<ul>
+			--{{guestbook|length}} : {{guestbook.count|sub:1}}--
 			{% for gdata in guestbook %}
-			<li>
-				<table>
+			<li>	{% if forloop.first %}
+				<table style="border-collapse:collapse;border:2px solid #666666;background:#eeeeee;">
+					{% else %}
+					<table style="border-collapse:collapse;">
+					{% endif %}
+					<col width="20" />
+					<col width="40" />
+					<col width="20" />
+					<col width="20" />
 					<tr>
-						<td>{{forloop.revcounter}}</td>
-						<td>{{gdata.name}}</td>
-						<td>{{gdata.regdate}}</td>
-						<td><a href="/guestbook/deleteform/{{gdata.id}}">삭제</a></td>
+						{% comment 'forloop variable' %}
+						<td>[{{forloop.revcounter}}]</td>
+						{% endcomment %}
+						<td>[{{guestbook.count|sub:forloop.counter|add:1}}]</td>
+						<td>{{gdata.name}} : {{gdata.name|length}}</td>
+						<td>{{gdata.regdate|date:'Y-m-d'}}</td>
+						<td style="text-align:center;"><a href="/guestbook/deleteform/{{gdata.id}}" style="text-decoration:none;font-weight:bold;color:blue;">삭제</a></td>
 					</tr>
 					<tr>
 						<td colspan=4>
