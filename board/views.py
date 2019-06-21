@@ -177,9 +177,14 @@ def modify_post(request):
     # 내 게시글이 아니면 잘못된 접근
     if authuser['id'] != boardview.user.id:
         return HttpResponseRedirect('/board')
-    boardview.title = request.POST.get('title', '')
-    boardview.content = request.POST.get('content', '')
-    boardview.save()
+
+    # boardview.title = request.POST.get('title', '')
+    # boardview.content = request.POST.get('content', '')
+    # boardview.save()
+
+    title = request.POST.get('title', '')
+    content = request.POST.get('content', '')
+    Board.objects.filter(id=no).update(title=title, content=content)
 
     return HttpResponseRedirect('/board/view?no={0}&pages={1}'.format(no, pages))
 
@@ -210,8 +215,7 @@ def view(request):
 
     if cookie_name not in request.COOKIES:
         # 최초 방문하였다면 쿠키를 새로 만들어야함
-        boardview.hit += 1
-        boardview.save()
+        Board.objects.filter(id=no).update(hit=F('hit')+1)
         response.set_cookie(cookie_name, str(no), max_age=365*24*60*60)
     else:
         print(request.COOKIES[cookie_name])
@@ -219,8 +223,7 @@ def view(request):
         strings = request.COOKIES[cookie_name].split('/')
         if str(no) not in strings:
             # 방문한 기록이 없으며 조회수 증가
-            boardview.hit += 1
-            boardview.save()
+            Board.objects.filter(id=no).update(hit=F('hit')+1)
             # 쿠키 처리
             response.set_cookie(cookie_name, request.COOKIES[cookie_name]+'/'+str(no), max_age=365 * 24 * 60 * 60)
 
