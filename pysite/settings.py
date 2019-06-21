@@ -127,3 +127,9 @@ USE_TZ = True
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'statics'),)
 STATIC_URL = '/assets/'
 
+
+# SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+
+# session
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

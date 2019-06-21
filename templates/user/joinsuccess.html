@@ -5,11 +5,10 @@
 {% endblock %}
 
 {% block content %}
-	<div id="user">
-		<p class="jr-success">
-			회원가입을 축하합니다.
-			<br><br>
-			<a href="/user/loginform">로그인하기</a>
-		</p>
-	</div>
+	{% if request.GET.result == 'success' %}
+	<script>
+		alert('성공적으로 수정하였습니다.')
+		history.go(-1)
+	</script>
+	{% endif %}
 {% endblock %}
