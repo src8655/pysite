@@ -25,13 +25,14 @@
 					data: "",
 					success: function(response){
 						if(response.result != "success") {
-							console.log(response);
+							console.error(response.data);
 							return;
 						}
 
 						if(response.data == true) {
 							alert("이미 존재하는 이메일입니다.\n다른 이메일을 사용해 주세요.");
 							$("#email").val("");
+							$("#email").focus();
 							return;
 						}
 						$("#check-button").hide();
