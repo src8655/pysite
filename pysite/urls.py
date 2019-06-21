@@ -32,6 +32,7 @@ urlpatterns = [
     path('user/logout', user_views.logout),
     path('user/updateform', user_views.updateform),
     path('user/update', user_views.update),
+    path('user/api/checkemail', user_views.checkemail),
 
     # guestbook
     path('guestbook/', guestbook_views.guestbooklist),

@@ -1,5 +1,5 @@
 from django.forms import model_to_dict
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 
 
@@ -67,5 +67,29 @@ def update(request):
         user.password = request.POST['password']
 
     user.save()
+
     request.session['authuser'] = model_to_dict(user)
+
     return HttpResponseRedirect('/user/updateform?result=success')
+
+
+def checkemail(request):
+    email = request.GET['email']
+    if email is None:
+        result = {
+            'result': 'fail',
+            'data': None
+        }
+        return JsonResponse(result)
+
+    user = User.objects.filter(email=email)
+
+    data = False
+    if len(user) != 0:
+        data = True
+
+    result = {
+        'result': 'success',
+        'data': data
+    }
+    return JsonResponse(result)
