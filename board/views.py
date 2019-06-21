@@ -197,25 +197,34 @@ def view(request):
 
     boardview = Board.objects.get(id=no)
 
-    # 조회수 처리
-    boardview.hit += 1
-    boardview.save()
-
-    # cookie_name = 'board_hit'   # 쿠키이름
-    # if request.cookies.get(cookie_name) is None:
-    #     # 최초 방문하였다면 쿠키를 새로 만들어야함
-    #     set_cookie(cookie_name, str(no), max_age=365*24*60*60)
-    # else:
-    #     print(request.cookies.get(cookie_name))
-    
     data = {
         'no': no,
         'boardview': boardview,
         'pages': pages,
         'kwd': kwd
     }
+    response = render(request, 'board/view.html', data)
 
-    return render(request, 'board/view.html', data)
+    # 조회수 처리
+    cookie_name = 'board_hit'   # 쿠키이름
+
+    if cookie_name not in request.COOKIES:
+        # 최초 방문하였다면 쿠키를 새로 만들어야함
+        boardview.hit += 1
+        boardview.save()
+        response.set_cookie(cookie_name, str(no), max_age=365*24*60*60)
+    else:
+        print(request.COOKIES[cookie_name])
+        # 쿠키가 있으면 게시글을 방문했는지 확인
+        strings = request.COOKIES[cookie_name].split('/')
+        if str(no) not in strings:
+            # 방문한 기록이 없으며 조회수 증가
+            boardview.hit += 1
+            boardview.save()
+            # 쿠키 처리
+            response.set_cookie(cookie_name, request.COOKIES[cookie_name]+'/'+str(no), max_age=365 * 24 * 60 * 60)
+
+    return response
 
 
 def delete(request):
