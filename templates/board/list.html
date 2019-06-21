@@ -41,7 +41,11 @@
 				<td>{{bdata.user.name}}</td>
 				<td>{{bdata.hit}}</td>
 				<td>{{bdata.regdate|date:"Y-m-d"}}</td>
-				<td><a href="/board/delete?no={{bdata.id}}&pages={{pages}}&kwd={{kwd|urlencode}}">삭제</a></td>
+				<td>
+						{% if request.session.authuser.id == bdata.user.id %}
+							<a href="/board/delete?no={{bdata.id}}&pages={{pages}}&kwd={{kwd|urlencode}}">삭제</a>
+						{% endif %}
+				</td>
 				{% else %}
 					<td></td>
 					<td></td>

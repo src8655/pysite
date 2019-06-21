@@ -207,7 +207,7 @@ def view(request):
     #     set_cookie(cookie_name, str(no), max_age=365*24*60*60)
     # else:
     #     print(request.cookies.get(cookie_name))
-
+    
     data = {
         'no': no,
         'boardview': boardview,
