@@ -15,4 +15,6 @@ class Board(models.Model):
     depth = models.IntegerField(default=0)
     user = models.ForeignKey(User, to_field='id', on_delete=models.CASCADE)   # User 테이블의 id를 외부키로 가짐
     #                                                        => user가 지워지면 얘도 지워지게
+    status = models.IntegerField(default=1)
+    parentno = models.IntegerField(default=-1)
 
