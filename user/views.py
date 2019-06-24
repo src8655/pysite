@@ -19,6 +19,16 @@ def join(request):
     user.gender = request.POST['gender']
     user.password = request.POST['password']
 
+    # 스크립트를 무시하고 잘못된 정보를 줬을 때
+    if user.name == '':
+        return HttpResponseRedirect('/')
+    if user.email == '':
+        return HttpResponseRedirect('/')
+    if user.gender == '':
+        return HttpResponseRedirect('/')
+    if user.password == '':
+        return HttpResponseRedirect('/')
+
     user.save()
 
     return HttpResponseRedirect('/user/joinsuccess')
