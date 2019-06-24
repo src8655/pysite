@@ -2,11 +2,26 @@
 
 {% block csslink %}
 <link href="/assets/css/board.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+function board_valid() {
+	forms = document.getElementById('board_write');
+	if(forms.title.value == '') {
+		alert('제목을 입력해주세요.');
+		return ;
+	}
+	if(forms.content.value == '') {
+		alert('내용을 입력해주세요.');
+		return ;
+	}
+
+	forms.submit();
+}
+</script>
 {% endblock %}
 
 {% block content %}
 	<div id="board">
-		<form class="board-form" method="post" action="/board/write/post">
+		<form class="board-form" method="post" action="/board/write/post" id="board_write">
 			{% csrf_token %}
 			<input type="hidden" name="parentno" value="{{parentno}}" />
 			<input type="hidden" name="pages" value="{{pages}}" />
@@ -32,7 +47,7 @@
 				{% else %}
 					<a href="/board/view?pages={{pages}}&no={{parentno}}&kwd={{kwd|urlencode}}">취소</a>
 				{% endif %}
-				<input type="submit" value="등록" />
+				<a href="#100" onclick="board_valid()">등록</a>
 			</div>
 		</form>
 	</div>
