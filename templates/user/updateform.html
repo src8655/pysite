@@ -2,6 +2,17 @@
 
 {% block csslink %}
 	<link href="/assets/css/user.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript">
+		function join_form_check() {
+			var forms = document.getElementById('join-form');
+
+			if(forms.name.value == "") {
+				alert("이름을 입력해 주세요.");
+				return;
+			}
+			forms.submit();
+		}
+	</script>
 {% endblock %}
 
 {% block content %}
@@ -29,7 +40,7 @@
 				{% endif %}
 			</fieldset>
 
-			<input type="submit" value="수정하기" />
+			<input type="button" value="수정하기" onclick="join_form_check()" />
 
 		</form>
 	</div>
