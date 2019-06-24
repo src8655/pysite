@@ -61,6 +61,12 @@
 		<!-- pager 추가 -->
 		<div class="pager">
 			<ul>
+				<!-- 제일 첫 페이지로 -->
+				{% if pages == 1 %}
+					<li>&lt;&lt;</li>
+				{% else %}
+					<li><a href="/board?pages=1&kwd={{kwd|urlencode}}">&lt;&lt;</a></li>
+				{% endif %}
 				<!-- 1보다 작으면 버튼 비활성화 -->
 				{% if paging.rangestart_1 < 1 %}
 					<li>◀</li>
@@ -85,6 +91,13 @@
 				{% else %}
 				<!-- 최대 페이지보다 크면 버튼 비활성화 -->
 					<li>▶</li>
+				{% endif %}
+
+				<!-- 제일 끝 페이지로 -->
+				{% if pages < paging.lastpage %}
+					<li><a href="/board?pages={{paging.lastpage}}&kwd={{kwd|urlencode}}">&gt;&gt;</a></li>
+				{% else %}
+					<li>&gt;&gt;</li>
 				{% endif %}
 
 			</ul>
