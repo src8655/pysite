@@ -29,6 +29,11 @@ def join(request):
     if user.password == '':
         return HttpResponseRedirect('/')
 
+    # 이미 존재하는데 스크립트를 무시했을 때
+    user_tmp = User.objects.filter(email=user.email)
+    if len(user_tmp) != 0:
+        return HttpResponseRedirect('/')
+
     user.save()
 
     return HttpResponseRedirect('/user/joinsuccess')
