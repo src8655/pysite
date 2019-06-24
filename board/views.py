@@ -88,6 +88,12 @@ def write_post(request):
     board.title = request.POST['title']
     board.content = request.POST['content']
 
+    # 스크립트를 무시하고 잘못된 정보를 줬을 때
+    if board.title == '':
+        return HttpResponseRedirect('/board')
+    if board.content == '':
+        return HttpResponseRedirect('/board')
+
     # 부모id가 있으면 답글
     parentno = int(request.POST.get('parentno', -1))
 
@@ -178,12 +184,15 @@ def modify_post(request):
     if authuser['id'] != boardview.user.id:
         return HttpResponseRedirect('/board')
 
-    # boardview.title = request.POST.get('title', '')
-    # boardview.content = request.POST.get('content', '')
-    # boardview.save()
-
     title = request.POST.get('title', '')
     content = request.POST.get('content', '')
+
+    # 스크립트를 무시하고 잘못된 정보를 줬을 때
+    if title == '':
+        return HttpResponseRedirect('/board')
+    if content == '':
+        return HttpResponseRedirect('/board')
+
     Board.objects.filter(id=no).update(title=title, content=content)
 
     return HttpResponseRedirect('/board/view?no={0}&pages={1}'.format(no, pages))
