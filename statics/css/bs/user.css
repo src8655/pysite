@@ -1,0 +1,21 @@
+@CHARSET "UTF-8";
+@import "mysite.css";
+
+#user		{ margin:20px auto;	width:540px; }
+
+fieldset				{ border:none }
+input[type="submit"]	{ display:block; width:80px; margin:20px auto }
+
+.login-form	{
+	padding:10px;
+	border:1px solid #e6e6e6;
+	border-radius: 10px;
+}
+.login-form .input-group {
+margin-top:10px;
+margin-bottom:10px;
+}
+
+#user p		{ text-align:center; padding:10px}
+
+#user p.jr-success	{ height:200px }

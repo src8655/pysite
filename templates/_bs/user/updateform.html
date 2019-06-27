@@ -1,0 +1,57 @@
+{% extends '../base.html' %}
+
+{% block csslink %}
+	<link href="/assets/css/bs/user.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript">
+		function join_form_check() {
+			var forms = document.getElementById('join-form');
+
+			if(forms.name.value == "") {
+				alert("이름을 입력해 주세요.");
+				return;
+			}
+			forms.submit();
+		}
+	</script>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+		<div class="col-xs-1 col-sm-3 col-lg-4"></div>
+		<div class="col-xs-10 col-sm-6 col-lg-4 login-form">
+		<form method="post" action="/user/update" id="join-form">
+			{% csrf_token %}
+		  <div class="input-group">
+			<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+			<input id="name" type="text" class="form-control" name="name" placeholder="이름" value="{{request.session.authuser.name}}">
+		  </div>
+		  <div class="input-group">
+			<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+			<input id="email" type="text" class="form-control" disabled="disabled" value="{{request.session.authuser.email}}" placeholder="이메일">
+		  </div>
+		  <div class="input-group">
+			<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+			<input id="password" type="password" class="form-control" name="password" placeholder="비밀번호">
+		  </div>
+		  <div class="form-group">
+				{% if user.gender == 'female' %}
+			<label class="radio-inline"><input type="radio" name="gender" value="female" checked>여자</label>
+			<label class="radio-inline"><input type="radio" name="gender" value="male">남자</label>
+				{% else %}
+			<label class="radio-inline"><input type="radio" name="gender" value="female">여자</label>
+			<label class="radio-inline"><input type="radio" name="gender" value="male" checked>남자</label>
+				{% endif %}
+		  </div>
+		  <div class="form-group">
+			<div class="text-center">
+			  <button type="button" class="btn btn-default" onclick="join_form_check()">수정하기</button>
+			</div>
+		  </div>
+
+
+		</form>
+		</div>
+		<div class="col-xs-1 col-sm-3 col-lg-4"></div>
+	</div>
+
+{% endblock %}

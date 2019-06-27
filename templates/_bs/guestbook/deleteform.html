@@ -1,0 +1,21 @@
+{% extends '../base.html' %}
+
+{% block csslink %}
+	<link href="/assets/css/bs/guestbook.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+
+<div class="delete-form text-center">
+<form class="form-inline" action="/guestbook/delete" method="post">
+			{% csrf_token %}
+			<input type='hidden' name="id" value="{{id}}">
+  <div class="form-group">
+    <label for="pwd" class="hidden-xs">비밀번호:</label>
+    <input type="password" class="form-control" id="pwd" placeholder="비밀번호" name="password" />
+  </div>
+  <button type="submit" class="btn btn-default">확인</button>
+</form>
+</div>
+
+{% endblock %}

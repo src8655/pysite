@@ -15,7 +15,7 @@ def guestbooklist(request):
         'cnt': cnt
     }
 
-    return render(request, '_bs/guestbook/list.html', data)
+    return render(request, 'guestbook/list.html', data)
 
 
 def add(request):
@@ -35,7 +35,7 @@ def deleteform(request, id=0):
     data = {
         'id': id
     }
-    return render(request, '_bs/guestbook/deleteform.html', data)
+    return render(request, 'guestbook/deleteform.html', data)
 
 
 def delete(request):

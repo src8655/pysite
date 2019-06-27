@@ -1,0 +1,53 @@
+{% extends '../base.html' %}
+
+{% load mathfilters %}
+
+{% block csslink %}
+	<link href="/assets/css/bs/guestbook.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div id="guestbook">
+		<form class="form-horizontal" action="/guestbook/add" method="post" style="padding:20px;">{% csrf_token %}
+		  <div class="form-group">
+			<label for="name">이름:</label>
+			  <input type="text" class="form-control" id="name" placeholder="Enter email" name="name" />
+		  </div>
+		  <div class="form-group">
+			<label for="pwd">비밀번호:</label>
+			  <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password" />
+		  </div>
+		  <div class="form-group">
+			<label for="memo">내용:</label>
+				<textarea class="form-control" rows="5" id="memo" placeholder="Enter memo" name="content"></textarea>
+		  </div>
+		  <div class="form-group">
+			  <button type="submit" class="btn btn-default">Submit</button>
+		  </div>
+		</form>
+			{% for gdata in guestbook %}
+		<div class="panel-group">
+		  <div class="panel panel-default">
+			<div class="panel-heading">
+			  <h4 class="panel-title">
+				<a data-toggle="collapse">
+					{{gdata.name}}
+				</a>
+			  </h4>
+			</div>
+			<div id="collapse1" class="panel-collapse collapse in">
+			  <div class="panel-body">
+				{{gdata.content}}
+			  </div>
+			  <div class="panel-footer">
+				  {{gdata.regdate|date:'Y-m-d'}} |
+				  <a href="/guestbook/deleteform/{{gdata.id}}" style="text-decoration:none;font-weight:bold;color:#676767;">[삭제]</a>
+			  </div>
+			</div>
+		  </div>
+		</div>
+
+
+			{% endfor %}
+	</div>
+{% endblock %}

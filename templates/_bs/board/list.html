@@ -1,0 +1,123 @@
+{% extends '../base.html' %}
+
+{% load mathfilters %}
+
+{% block csslink %}
+<link href="/assets/css/bs/board.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div>
+
+		<div class="delete-form text-center">
+		<form class="form-inline" action="/board" method="get">
+					{% csrf_token %}
+					<input type='hidden' name="id" value="{{id}}">
+		  <div class="form-group">
+			<input class="form-control" placeholder="검색어"  type="text" id="kwd" name="kwd" value="{{kwd}}" />
+		  </div>
+		  <button type="submit" class="btn btn-default">찾기</button>
+		</form>
+		</div>
+		<table class="table table-striped">
+			<thead>
+			<tr>
+				<th>번호</th>
+				<th>제목</th>
+				<th>글쓴이</th>
+				<th>조회수</th>
+				<th>작성일</th>
+				<th>&nbsp;</th>
+			</tr>
+			</thead>
+			{% for bdata in boards %}
+			<tr>
+				<td>
+					{{paging.count|sub:paging.startnum|sub:forloop.counter|add:1}}
+				</td>
+				<td style="text-align:left;">
+						{% if bdata.depth != 0 %}
+							<img src="/assets/images/reply.png" alt="답글" style="margin-left:{{bdata.depth|mul:20}}px;" />
+						{% endif %}
+					{% if bdata.status == 1 %}
+						<a href="/board/view?no={{bdata.id}}&pages={{pages}}&kwd={{kwd|urlencode}}">{{bdata.title}}</a>
+					{% else %}
+						삭제된 게시글 입니다.
+					{% endif %}
+				</td>
+				{% if bdata.status == 1 %}
+				<td>{{bdata.user.name}}</td>
+				<td>{{bdata.hit}}</td>
+				<td>{{bdata.regdate|date:"Y-m-d"}}</td>
+				<td>
+						{% if request.session.authuser.id == bdata.user.id %}
+							<a href="/board/delete?no={{bdata.id}}&pages={{pages}}&kwd={{kwd|urlencode}}">삭제</a>
+						{% endif %}
+				</td>
+				{% else %}
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				{% endif %}
+			</tr>
+			{% endfor %}
+
+		</table>
+
+
+		<!-- pager 추가 -->
+		<div class="pager">
+			<ul>
+				<!-- 제일 첫 페이지로 -->
+				{% if pages == 1 %}
+				<li><a style="color:gray;">&lt;&lt;</a></li>
+				{% else %}
+					<li><a href="/board?pages=1&kwd={{kwd|urlencode}}" style="color:#676767;font-weight:bold;">&lt;&lt;</a></li>
+				{% endif %}
+				<!-- 1보다 작으면 버튼 비활성화 -->
+				{% if paging.rangestart_1 < 1 %}
+				<li><a style="color:gray;">◀</a></li>
+				{% else %}
+					<li><a href="/board?pages={{paging.rangestart_1}}&kwd={{kwd|urlencode}}" style="color:#676767;font-weight:bold;">◀</a></li>
+				{% endif %}
+				{% for i in paging.range %}
+					<!-- 최대 페이지를 넘어가면 비활성화 -->
+					{% if i > paging.lastpage %}
+				<li><a style="color:gray;">{{i}}</a></li>
+					{% else %}
+						{% if i == pages %}
+				<li><a style="color:red;font-weight:bold;">{{i}}</a></li>
+						{% else %}
+							<li><a href="/board?pages={{i}}&kwd={{kwd|urlencode}}" style="color:#676767;font-weight:bold;">{{i}}</a></li>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+				<!-- 최대 페이지보다 작거나 같으면 버튼활성화 -->
+				{% if paging.rangestart__pagecnt <= paging.lastpage %}
+					<li><a href="/board?pages={{paging.rangestart__pagecnt}}&kwd={{kwd|urlencode}}" style="color:#676767;font-weight:bold;">▶</a></li>
+				{% else %}
+				<!-- 최대 페이지보다 크면 버튼 비활성화 -->
+				<li><a style="color:gray;">▶</a></li>
+				{% endif %}
+
+				<!-- 제일 끝 페이지로 -->
+				{% if pages < paging.lastpage %}
+					<li><a href="/board?pages={{paging.lastpage}}&kwd={{kwd|urlencode}}" style="color:#676767;font-weight:bold;">&gt;&gt;</a></li>
+				{% else %}
+					<li><a style="color:gray;">&gt;&gt;</a></li>
+				{% endif %}
+
+			</ul>
+		</div>
+		<!-- pager 추가 -->
+
+
+
+		{% if request.session.authuser is not None %}
+		<div class="bottom text-right">
+			<a href="/board/write?pages={{pages}}&kwd={{kwd|urlencode}}" class="btn btn-primary">글쓰기</a>
+		</div>
+		{% endif %}
+	</div>
+{% endblock %}

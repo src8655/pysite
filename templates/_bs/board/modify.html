@@ -1,0 +1,54 @@
+{% extends '../base.html' %}
+
+{% block csslink %}
+<link href="/assets/css/bs/board.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+function board_valid() {
+	forms = document.getElementById('board_write');
+	if(forms.title.value == '') {
+		alert('제목을 입력해주세요.');
+		return ;
+	}
+	if(forms.content.value == '') {
+		alert('내용을 입력해주세요.');
+		return ;
+	}
+
+	forms.submit();
+}
+</script>
+{% endblock %}
+
+{% block content %}
+	<div>
+		<form method="post" action="/board/modify/post" id="board_write">
+			{% csrf_token %}
+			<input type="hidden" name="no" value="{{no}}" />
+			<input type="hidden" name="pages" value="{{pages}}" />
+			<input type="hidden" name="kwd" value="{{kwd}}" />
+			<table class="table table-striped">
+				<col width="30" />
+				<col width="80" />
+				<thead>
+				<tr>
+					<th colspan="2">글수정</th>
+				</tr>
+				</thead>
+				<tr>
+					<td>제목</td>
+					<td><input type="text" name="title" value="{{boardview.title}}" class="form-control"></td>
+				</tr>
+				<tr>
+					<td>내용</td>
+					<td>
+						<textarea id="content" name="content" rows="10" class="form-control">{{boardview.content}}</textarea>
+					</td>
+				</tr>
+			</table>
+			<div class="bottom text-right">
+				<a href="/board/view?pages={{pages}}&no={{no}}&kwd={{kwd|urlencode}}" class="btn btn-primary">취소</a>
+				<a href="#100" onclick="board_valid()" class="btn btn-primary">수정</a>
+			</div>
+		</form>
+	</div>
+{% endblock %}

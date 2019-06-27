@@ -47,7 +47,7 @@ def boardlist(request):
         'kwd': kwd
     }
 
-    return render(request, '_bs/board/list.html', data)
+    return render(request, 'board/list.html', data)
 
 
 # 작성하기
@@ -69,7 +69,7 @@ def write(request):
         'kwd': kwd
     }
 
-    return render(request, '_bs/board/write.html', data)
+    return render(request, 'board/write.html', data)
 
 
 # 작성하기 post
@@ -159,7 +159,7 @@ def modify(request):
         'kwd': kwd
     }
 
-    return render(request, '_bs/board/modify.html', data)
+    return render(request, 'board/modify.html', data)
 
 
 # 수정하기 post
@@ -217,7 +217,7 @@ def view(request):
         'pages': pages,
         'kwd': kwd
     }
-    response = render(request, '_bs/board/view.html', data)
+    response = render(request, 'board/view.html', data)
 
     # 조회수 처리
     cookie_name = 'board_hit'   # 쿠키이름
